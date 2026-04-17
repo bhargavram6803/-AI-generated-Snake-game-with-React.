@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-pixel: "Press Start 2P", cursive;
+  --font-mono: "VT323", monospace;
+}
+
+:root {
+  --cyan: #00ffff;
+  --magenta: #ff00ff;
+  --bg-dark: #000000;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--cyan);
+  overflow-x: hidden;
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+/* CRT Scanlines Overlay */
+body::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 50;
+  background-size: 100% 4px, 3px 100%;
+  pointer-events: none;
+}
+
+/* Static noise */
+.static-noise {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: repeating-radial-gradient(ellipse at 50% 50%, transparent 0, transparent 2px, rgba(0, 255, 255, 0.05) 3px, rgba(255, 0, 255, 0.05) 4px);
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  z-index: -1;
+}
+
+/* Base Glitch Effect */
+.glitch {
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+}
+.glitch::before, .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-dark);
+}
+.glitch::before {
+  color: var(--cyan);
+  z-index: -1;
+  animation: glitch-anim 2s cubic-bezier(.25, .46, .45, .94) infinite;
+}
+.glitch::after {
+  color: var(--magenta);
+  z-index: -2;
+  animation: glitch-anim-2 2.5s cubic-bezier(.25, .46, .45, .94) infinite alternate-reverse;
+}
+
+.glitch-magenta::before, .glitch-magenta::after {
+  background: transparent;
+}
+.glitch-magenta::before { color: var(--magenta); transform: translate(-2px, 0); animation: none; }
+.glitch-magenta::after { color: var(--cyan); transform: translate(2px, 0); animation: none; }
+
+@keyframes glitch-anim {
+  0% { clip-path: inset(80% 0 0 0); transform: translate(-3px, 1px); }
+  20% { clip-path: inset(20% 0 20% 0); transform: translate(3px, -2px); }
+  40% { clip-path: inset(60% 0 10% 0); transform: translate(-3px, 2px); }
+  60% { clip-path: inset(10% 0 50% 0); transform: translate(3px, -1px); }
+  80% { clip-path: inset(40% 0 30% 0); transform: translate(-3px, -2px); }
+  100% { clip-path: inset(50% 0 50% 0); transform: translate(3px, 1px); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(10% 0 60% 0); transform: translate(3px, -1px); }
+  20% { clip-path: inset(80% 0 5% 0); transform: translate(-3px, 2px); }
+  40% { clip-path: inset(30% 0 40% 0); transform: translate(3px, -2px); }
+  60% { clip-path: inset(70% 0 15% 0); transform: translate(-3px, 1px); }
+  80% { clip-path: inset(20% 0 50% 0); transform: translate(3px, 2px); }
+  100% { clip-path: inset(50% 0 30% 0); transform: translate(-3px, -1px); }
+}
+
+/* Screen Tear Animation */
+.scan-tear {
+  animation: tear-effect 4s infinite steps(1);
+}
+@keyframes tear-effect {
+  0% { transform: translateX(0); }
+  3% { transform: translateX(6px) skewX(2deg); filter: hue-rotate(90deg) contrast(150%); }
+  5% { transform: translateX(-6px) skewX(-2deg); filter: hue-rotate(-90deg) contrast(150%); }
+  7% { transform: translateX(0) skewX(0); filter: hue-rotate(0); }
+  100% { transform: translateX(0); }
+}
+
+/* Brutalist Pixel Borders */
+.border-glitch {
+  border: 4px solid var(--cyan);
+  box-shadow: 6px 6px 0 var(--magenta);
+  background-color: var(--bg-dark);
+}
+
+.border-glitch-magenta {
+  border: 4px solid var(--magenta);
+  box-shadow: -6px 6px 0 var(--cyan);
+  background-color: var(--bg-dark);
+}
